@@ -1,0 +1,3 @@
+<configuration>
+    <include resource="logback/korekto-base.xml"/>
+</configuration>
