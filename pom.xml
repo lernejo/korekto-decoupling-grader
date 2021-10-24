@@ -13,7 +13,7 @@
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
 
-        <korekto-toolkit.version>1.0.0</korekto-toolkit.version>
+        <korekto-toolkit.version>1.1.0</korekto-toolkit.version>
         <logback-classic.version>1.2.3</logback-classic.version>
 
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
