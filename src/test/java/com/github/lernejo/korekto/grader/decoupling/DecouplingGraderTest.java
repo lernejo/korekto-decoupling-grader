@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JavaApiGraderTest {
+class DecouplingGraderTest {
 
     @BeforeEach
     void setUp() {
