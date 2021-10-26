@@ -8,16 +8,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v2
         with:
-          java-version: '16'
+          distribution: 'temurin'
+          java-version: '17'
       - uses: actions/cache@v2
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - run: mvn -version
       - run: ./mvnw -U test -Dgithub_token=${{ secrets.GH_TOKEN_REPO }} -Dserver_start_timeout=15 -DfailIfNoTests
         env:
-          MAVEN_HOME: /usr/share/apache-maven-3.8.1
+          MAVEN_HOME: /usr/share/apache-maven-3.8.3
       - uses: codecov/codecov-action@v1
