@@ -41,8 +41,7 @@ class DecouplingGraderTest {
         assertThat(contextHolder.get().getGradeDetails().getParts())
             .containsExactly(
                 new GradePart("Part 1 - Compilation & Tests", 4, 4.0D, List.of()),
-                new GradePart("Part 2 - CI", 1, 1.0D, List.of()),
-                new GradePart("Part 3 - Test Coverage", 2.4, 3.0D, List.of("Code coverage: 63.98%, expected: > 90% with `mvn verify`"))
+                new GradePart("Part 2 - CI", 1, 1.0D, List.of())
             );
     }
 }

@@ -10,10 +10,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
 
-        <korekto-toolkit.version>1.1.0</korekto-toolkit.version>
+        <korekto-toolkit.version>1.2.0</korekto-toolkit.version>
         <logback-classic.version>1.2.6</logback-classic.version>
 
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
