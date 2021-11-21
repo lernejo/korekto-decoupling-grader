@@ -10,4 +10,5 @@ public class LaunchingContext {
     public boolean compilationFailed;
     public boolean testFailed;
     public URLClassLoader exerciseClassloader;
+    public Class<?> loggerClass;
 }

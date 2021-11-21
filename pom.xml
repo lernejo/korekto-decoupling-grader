@@ -13,7 +13,8 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <korekto-toolkit.version>1.2.1</korekto-toolkit.version>
+        <korekto-toolkit.version>1.2.2-SNAPSHOT</korekto-toolkit.version>
+        <byte-buddy.version>1.12.1</byte-buddy.version>
         <logback-classic.version>1.2.6</logback-classic.version>
 
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
@@ -49,6 +50,12 @@
             <groupId>com.github.lernejo</groupId>
             <artifactId>korekto-toolkit</artifactId>
             <version>${korekto-toolkit.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>${byte-buddy.version}</version>
         </dependency>
 
         <dependency>

@@ -50,7 +50,8 @@ class DecouplingGraderTest {
                 new GradePart("Part 2 - CI", 1, 1.0D, List.of()),
                 new GradePart("Part 3 - Console Logger", 2, 2.0D, List.of()),
                 new GradePart("Part 4 - Human Player", 4, 4.0D, List.of()),
-                new GradePart("Part 5 - Computer Player", 4, 4.0D, List.of())
+                new GradePart("Part 5 - Computer Player", 4, 4.0D, List.of()),
+                new GradePart("Part 6 - Logger composition", 4, 4.0D, List.of())
             );
     }
 }

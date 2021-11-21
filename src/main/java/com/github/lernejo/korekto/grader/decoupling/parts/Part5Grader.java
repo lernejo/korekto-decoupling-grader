@@ -71,7 +71,7 @@ public class Part5Grader implements PartGrader {
         if (storedResult == null) {
             return result(List.of("No information output after launching the game in auto mode"), 0.0D);
         } else {
-            return result(List.of("No meaningful keywords in output (expecting to contain one of " + endKeywords + ", but was: " + storedResult), 1.0D);
+            return result(List.of("No meaningful keywords in output (expecting to contain one of " + endKeywords + ", but was: " + storedResult), maxGrade() / 4);
         }
     }
 

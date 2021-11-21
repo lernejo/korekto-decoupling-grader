@@ -29,14 +29,13 @@ public class Part3Grader implements PartGrader {
             return result(List.of("Not available when there is compilation failures"), 0.0D);
         }
 
-        context.exerciseClassloader = ClassLoaders.newIsolatedClassLoader(exercise.getRoot().resolve("target").resolve("classes"));
+        context.exerciseClassloader = ClassLoaders.newChildClassLoader(exercise.getRoot().resolve("target").resolve("classes"));
 
-        Class<?> loggerClass;
         String loggerClassName = "fr.lernejo.logger.Logger";
         String loggerFactoryClassName = "fr.lernejo.logger.LoggerFactory";
         String getLoggerMethodName = loggerFactoryClassName + "#getLogger(String)";
         try {
-            loggerClass = context.exerciseClassloader.loadClass(loggerClassName);
+            context.loggerClass = context.exerciseClassloader.loadClass(loggerClassName);
         } catch (ClassNotFoundException e) {
             return result(List.of("Class not found: " + loggerClassName), 0.0D);
         }
@@ -71,7 +70,7 @@ public class Part3Grader implements PartGrader {
 
         if (logger == null) {
             return result(List.of("Method " + getLoggerMethodName + " returns null"), 0.0D);
-        } else if (!loggerClass.isAssignableFrom(logger.getClass())) {
+        } else if (!context.loggerClass.isAssignableFrom(logger.getClass())) {
             return result(List.of("Method " + getLoggerMethodName + " returns an object that is not implementing " + loggerClassName), 0.0D);
         }
         return result(List.of(), maxGrade());
