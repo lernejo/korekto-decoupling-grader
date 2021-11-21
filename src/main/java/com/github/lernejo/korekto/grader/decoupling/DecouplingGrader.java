@@ -62,7 +62,8 @@ public class DecouplingGrader implements Grader {
             new Part2Grader(),
             new Part3Grader(),
             new Part4Grader(),
-            new Part5Grader()
+            new Part5Grader(),
+            new Part6Grader()
         );
     }
 }
