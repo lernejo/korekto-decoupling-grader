@@ -20,6 +20,4 @@ jobs:
             ${{ runner.os }}-maven-
       - run: mvn -version
       - run: ./mvnw -U test -Dgithub_token=${{ secrets.GH_TOKEN_REPO }} -Dserver_start_timeout=15 -DfailIfNoTests
-        env:
-          MAVEN_HOME: /usr/share/apache-maven-3.8.3
       - uses: codecov/codecov-action@v1
