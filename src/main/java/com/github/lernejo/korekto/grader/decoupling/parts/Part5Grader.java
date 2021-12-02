@@ -16,13 +16,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Part5Grader implements PartGrader {
-    private final Set<String> endKeywords = Set.of("done", "end", "win", "won", "fin", "bravo", "gagné");
-    private final Set<String> lowerKeywords = Set.of("petit", "lower");
-    private final Set<String> greaterKeywords = Set.of("grand", "greater");
-    private final Set<String> decisionKeywords = Stream.concat(
-        lowerKeywords.stream(),
-        greaterKeywords.stream()
-    ).collect(Collectors.toSet());
 
     @Override
     public String name() {
@@ -61,7 +54,7 @@ public class Part5Grader implements PartGrader {
                 if (welcome != null) {
                     scopedResult.addAll(tokenize(welcome));
                 }
-                if (endKeywords.stream().anyMatch(scopedResult::contains)) {
+                if (Part4Grader.endKeywords.stream().anyMatch(scopedResult::contains)) {
                     return result(List.of(), maxGrade());
                 }
             } catch (IOException | RuntimeException e) {
@@ -71,7 +64,7 @@ public class Part5Grader implements PartGrader {
         if (storedResult == null) {
             return result(List.of("No information output after launching the game in auto mode"), 0.0D);
         } else {
-            return result(List.of("No meaningful keywords in output (expecting to contain one of " + endKeywords + ", but was: " + storedResult), maxGrade() / 4);
+            return result(List.of("No meaningful keywords in output (expecting to contain one of " + Part4Grader.endKeywords + ", but was: " + storedResult), maxGrade() / 4);
         }
     }
 

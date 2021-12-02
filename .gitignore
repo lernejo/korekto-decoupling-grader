@@ -18,4 +18,4 @@ buildNumber.properties
 *.iml
 
 .env
-
+slugs.txt

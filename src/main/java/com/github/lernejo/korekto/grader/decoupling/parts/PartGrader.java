@@ -1,20 +1,22 @@
 package com.github.lernejo.korekto.grader.decoupling.parts;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import com.github.lernejo.korekto.grader.decoupling.LaunchingContext;
 import com.github.lernejo.korekto.toolkit.Exercise;
 import com.github.lernejo.korekto.toolkit.GradePart;
 import com.github.lernejo.korekto.toolkit.GradingConfiguration;
 import com.github.lernejo.korekto.toolkit.misc.SubjectForToolkitInclusion;
 import com.github.lernejo.korekto.toolkit.thirdparty.git.GitContext;
+import org.mozilla.universalchardet.UniversalDetector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @SubjectForToolkitInclusion
 public interface PartGrader {
@@ -49,7 +51,11 @@ public interface PartGrader {
                 StringBuilder sb = new StringBuilder();
                 while (process.getInputStream().available() > 0) {
                     byte[] bytes = process.getInputStream().readNBytes(process.getInputStream().available());
-                    sb.append(new String(bytes, StandardCharsets.UTF_8));
+                    UniversalDetector detector = new UniversalDetector();
+                    detector.handleData(bytes);
+                    detector.dataEnd();
+                    String detectedCharset = detector.getDetectedCharset();
+                    sb.append(new String(bytes, detectedCharset != null ? Charset.forName(detectedCharset) : StandardCharsets.UTF_8));
                 }
                 String lineOutput = sb.toString().trim();
                 if (lineOutput.length() == 0) {
