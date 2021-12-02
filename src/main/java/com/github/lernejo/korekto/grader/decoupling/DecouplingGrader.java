@@ -21,7 +21,12 @@ public class DecouplingGrader implements Grader {
 
     @Override
     public String slugToRepoUrl(String slug) {
-        return "https://github.com/" + slug + "/decoupling_java_training";
+        return "https://github.com/" + slug + "/decouplig_java_training";
+    }
+
+    @Override
+    public boolean needsWorkspaceReset() {
+        return true;
     }
 
     @Override
