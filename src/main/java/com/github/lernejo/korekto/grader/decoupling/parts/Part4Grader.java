@@ -21,6 +21,8 @@ public class Part4Grader implements PartGrader {
         lowerKeywords.stream(),
         greaterKeywords.stream()
     ).collect(Collectors.toSet());
+    
+    static final String TOKENIZE_REGEX = "\\s|\\p{Punct}";
 
     @Override
     public String name() {
@@ -42,7 +44,7 @@ public class Part4Grader implements PartGrader {
         context.processBuilder.command(Paths.get(System.getProperty("java.home")).resolve("bin").resolve("java").toString(), "-cp", exercise.getRoot().resolve("target").resolve("classes").toString(), mainClass, "-interactive");
 
         int attempt = 0;
-        String storedResult;
+        String storedResult = "<no output>";
         do {
             attempt++;
             try (CloseableProcess process = new CloseableProcess(context.processBuilder.start())) {
@@ -75,7 +77,7 @@ public class Part4Grader implements PartGrader {
                 do {
                     currentIteration++;
 
-                    List<String> scopedResult2 = List.of(result.toLowerCase().split("\\s|\\."));
+                    List<String> scopedResult2 = List.of(result.toLowerCase().split(TOKENIZE_REGEX));
                     if (endKeywords.stream().anyMatch(scopedResult2::contains)) {
                         return result(List.of(), maxGrade());
                     }
@@ -89,6 +91,9 @@ public class Part4Grader implements PartGrader {
                     nextGuess = (max + min) / 2;
                     writeInput(process.process(), nextGuess + "\n");
                     result = readOutput(process.process());
+                    if (result == null) {
+                        return result(List.of("Cannot get an output in " + processReadTimeout + " ms, last output was: `" + storedResult + "`"), maxGrade() * 1.0 / 3);
+                    }
                     storedResult = result;
                 } while (currentIteration < maxLoop);
                 // Factorize that,the only difference is the way the numbers are going (according to the use of the passive form or not)
@@ -99,7 +104,7 @@ public class Part4Grader implements PartGrader {
                 do {
                     currentIteration++;
 
-                    List<String> scopedResult2 = List.of(result.toLowerCase().split("\\s|\\."));
+                    List<String> scopedResult2 = List.of(result.toLowerCase().split(TOKENIZE_REGEX));
                     if (endKeywords.stream().anyMatch(scopedResult2::contains)) {
                         return result(List.of(), maxGrade());
                     }
@@ -113,6 +118,9 @@ public class Part4Grader implements PartGrader {
                     nextGuess = (max + min) / 2;
                     writeInput(process.process(), nextGuess + "\n");
                     result = readOutput(process.process());
+                    if (result == null) {
+                        return result(List.of("Cannot get an output in " + processReadTimeout + " ms, last output was: `" + storedResult + "`"), maxGrade() * 1.0 / 3);
+                    }
                     storedResult = result;
                 } while (currentIteration < maxLoop);
                 return result(List.of("Cannot get the game to converge in " + maxLoop + " iterations (last message was: `" + storedResult + "`"), maxGrade() * 2.0 / 3);

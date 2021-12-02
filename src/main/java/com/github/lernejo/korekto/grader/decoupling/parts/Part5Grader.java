@@ -1,19 +1,16 @@
 package com.github.lernejo.korekto.grader.decoupling.parts;
 
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.lernejo.korekto.grader.decoupling.LaunchingContext;
 import com.github.lernejo.korekto.toolkit.Exercise;
 import com.github.lernejo.korekto.toolkit.GradePart;
 import com.github.lernejo.korekto.toolkit.GradingConfiguration;
 import com.github.lernejo.korekto.toolkit.thirdparty.git.GitContext;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Part5Grader implements PartGrader {
 
@@ -70,6 +67,6 @@ public class Part5Grader implements PartGrader {
 
     @NotNull
     private List<String> tokenize(String result) {
-        return new ArrayList<>(List.of(result.toLowerCase().split("\\s|\\.")));
+        return new ArrayList<>(List.of(result.toLowerCase().split(Part4Grader.TOKENIZE_REGEX)));
     }
 }
