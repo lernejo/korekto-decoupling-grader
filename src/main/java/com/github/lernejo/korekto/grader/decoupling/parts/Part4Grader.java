@@ -14,14 +14,14 @@ import com.github.lernejo.korekto.toolkit.GradingConfiguration;
 import com.github.lernejo.korekto.toolkit.thirdparty.git.GitContext;
 
 public class Part4Grader implements PartGrader {
-    static final Set<String> endKeywords = Set.of("done", "end", "win", "won", "fin", "bravo", "gagné", "trouvé");
+    static final Set<String> endKeywords = Set.of("done", "end", "win", "won", "fin", "bravo", "gagné", "trouvé", "found");
     static final Set<String> lowerKeywords = Set.of("petit", "lower");
     static final Set<String> greaterKeywords = Set.of("grand", "greater");
     static final Set<String> decisionKeywords = Stream.concat(
         lowerKeywords.stream(),
         greaterKeywords.stream()
     ).collect(Collectors.toSet());
-    
+
     static final String TOKENIZE_REGEX = "\\s|\\p{Punct}";
 
     @Override
@@ -55,8 +55,13 @@ public class Part4Grader implements PartGrader {
                 writeInput(process.process(), nextGuess + "\n");
 
                 String result = readOutput(process.process());
+                if (!process.process().isAlive()) {
+                    return result(List.of("Cannot launch the game: " + readStream(process.process().getErrorStream())), 0);
+                }
                 if (result == null) {
-                    return result(List.of("No information given to player after submitting a guess"), maxGrade() * 1.0 / 3);
+                    String error = readStream(process.process().getErrorStream());
+                    error = error != null ? "\n\t" + error : "";
+                    return result(List.of("No information given to player after submitting a guess (waited for" + processReadTimeout + "ms)" + error), maxGrade() * 1.0 / 3);
                 }
 
                 List<String> scopedResult = List.of(result.toLowerCase().split("\\s|\\."));

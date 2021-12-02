@@ -41,6 +41,10 @@ public class Part5Grader implements PartGrader {
                 String welcome = readOutput(process.process());// optional welcome message
 
                 String result = readOutput(process.process());
+                String error = readStream(process.process().getErrorStream());
+                if (error != null) {
+                    return result(List.of("An error occurred: " + error), 0);
+                }
                 if (result == null) {
                     continue;
                 } else {

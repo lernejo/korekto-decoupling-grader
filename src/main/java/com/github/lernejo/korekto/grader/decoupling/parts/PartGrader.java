@@ -2,6 +2,7 @@ package com.github.lernejo.korekto.grader.decoupling.parts;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -44,13 +45,17 @@ public interface PartGrader {
 
     @SubjectForToolkitInclusion
     default String readOutput(Process process) {
+        return readStream(process.getInputStream());
+    }
+
+    default String readStream(InputStream inputStream) {
         long start = System.currentTimeMillis();
         do {
             try {
                 TimeUnit.MILLISECONDS.sleep(processReadRetryDelay);
                 StringBuilder sb = new StringBuilder();
-                while (process.getInputStream().available() > 0) {
-                    byte[] bytes = process.getInputStream().readNBytes(process.getInputStream().available());
+                while (inputStream.available() > 0) {
+                    byte[] bytes = inputStream.readNBytes(inputStream.available());
                     UniversalDetector detector = new UniversalDetector();
                     detector.handleData(bytes);
                     detector.dataEnd();
