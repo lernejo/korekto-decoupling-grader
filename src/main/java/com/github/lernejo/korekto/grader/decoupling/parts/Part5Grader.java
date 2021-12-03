@@ -45,13 +45,13 @@ public class Part5Grader implements PartGrader {
                 if (error != null) {
                     return result(List.of("An error occurred: " + error), 0);
                 }
-                if (result == null) {
+                if (welcome == null && result == null) {
                     continue;
                 } else {
-                    storedResult = result;
+                    storedResult = welcome + "\n" + result;
                 }
 
-                List<String> scopedResult = tokenize(result);
+                List<String> scopedResult = tokenize(storedResult);
                 if (welcome != null) {
                     scopedResult.addAll(tokenize(welcome));
                 }

@@ -22,7 +22,7 @@ public class Part4Grader implements PartGrader {
         greaterKeywords.stream()
     ).collect(Collectors.toSet());
 
-    static final String TOKENIZE_REGEX = "\\s|\\p{Punct}";
+    static final String TOKENIZE_REGEX = "\\s|\\p{Punct}|\n";
 
     @Override
     public String name() {
