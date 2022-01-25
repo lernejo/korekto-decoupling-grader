@@ -1,35 +1,37 @@
 package com.github.lernejo.korekto.grader.decoupling.parts;
 
 import com.github.lernejo.korekto.grader.decoupling.LaunchingContext;
-import com.github.lernejo.korekto.toolkit.Exercise;
 import com.github.lernejo.korekto.toolkit.GradePart;
-import com.github.lernejo.korekto.toolkit.GradingConfiguration;
+import com.github.lernejo.korekto.toolkit.PartGrader;
 import com.github.lernejo.korekto.toolkit.misc.ClassLoaders;
-import com.github.lernejo.korekto.toolkit.thirdparty.git.GitContext;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class Part3Grader implements PartGrader {
+public class Part3Grader implements PartGrader<LaunchingContext> {
 
+    @NotNull
     @Override
     public String name() {
         return "Part 3 - Console Logger";
     }
 
+    @NotNull
     @Override
     public Double maxGrade() {
         return 2.0D;
     }
 
+    @NotNull
     @Override
-    public GradePart grade(GradingConfiguration configuration, Exercise exercise, LaunchingContext context, GitContext gitContext) {
+    public GradePart grade(LaunchingContext context) {
         if (context.compilationFailed) {
             return result(List.of("Not available when there is compilation failures"), 0.0D);
         }
 
-        context.exerciseClassloader = ClassLoaders.newChildClassLoader(exercise.getRoot().resolve("target").resolve("classes"));
+        context.exerciseClassloader = ClassLoaders.newChildClassLoader(context.getExercise().getRoot().resolve("target").resolve("classes"));
 
         String loggerClassName = "fr.lernejo.logger.Logger";
         String loggerFactoryClassName = "fr.lernejo.logger.LoggerFactory";

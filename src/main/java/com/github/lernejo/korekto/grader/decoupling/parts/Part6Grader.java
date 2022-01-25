@@ -1,10 +1,9 @@
 package com.github.lernejo.korekto.grader.decoupling.parts;
 
 import com.github.lernejo.korekto.grader.decoupling.LaunchingContext;
-import com.github.lernejo.korekto.toolkit.Exercise;
 import com.github.lernejo.korekto.toolkit.GradePart;
-import com.github.lernejo.korekto.toolkit.GradingConfiguration;
-import com.github.lernejo.korekto.toolkit.thirdparty.git.GitContext;
+import com.github.lernejo.korekto.toolkit.PartGrader;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
@@ -12,20 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class Part6Grader implements PartGrader {
+public class Part6Grader implements PartGrader<LaunchingContext> {
 
+    @NotNull
     @Override
     public String name() {
         return "Part 6 - Logger composition";
     }
 
+    @NotNull
     @Override
     public Double maxGrade() {
         return 4.0D;
     }
 
+    @NotNull
     @Override
-    public GradePart grade(GradingConfiguration configuration, Exercise exercise, LaunchingContext context, GitContext gitContext) {
+    public GradePart grade(LaunchingContext context) {
         if (context.loggerClass == null) {
             return result(List.of("Not available when there is no logger class"), 0.0D);
         }

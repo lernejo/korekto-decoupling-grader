@@ -34,11 +34,15 @@ class DecouplingGraderTest {
         GradingConfiguration configuration = new GradingConfiguration(repoUrl, "", "", workspace);
 
         AtomicReference<GradingContext> contextHolder = new AtomicReference<>();
+        AtomicReference<Exception> exceptionHolder = new AtomicReference<>();
         new GradingJob()
             .addCloneStep()
             .addStep("grading", grader)
-            .addStep("report", (conf, context) -> contextHolder.set(context))
-            .run(configuration);
+            .addStep("report", context -> contextHolder.set(context))
+            .addErrorListener((ex, conf, context) -> exceptionHolder.set(ex))
+            .run(configuration, conf -> grader.gradingContext(conf));
+
+        assertThat(exceptionHolder.get()).isNull();
 
         assertThat(contextHolder)
             .as("Grading context")

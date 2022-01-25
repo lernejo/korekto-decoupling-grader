@@ -1,5 +1,11 @@
 package com.github.lernejo.korekto.grader.decoupling.parts;
 
+import com.github.lernejo.korekto.grader.decoupling.LaunchingContext;
+import com.github.lernejo.korekto.toolkit.GradePart;
+import com.github.lernejo.korekto.toolkit.PartGrader;
+import com.github.lernejo.korekto.toolkit.misc.InteractiveProcess;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
@@ -7,13 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.github.lernejo.korekto.grader.decoupling.LaunchingContext;
-import com.github.lernejo.korekto.toolkit.Exercise;
-import com.github.lernejo.korekto.toolkit.GradePart;
-import com.github.lernejo.korekto.toolkit.GradingConfiguration;
-import com.github.lernejo.korekto.toolkit.thirdparty.git.GitContext;
-
-public class Part4Grader implements PartGrader {
+public class Part4Grader implements PartGrader<LaunchingContext> {
     static final Set<String> endKeywords = Set.of("done", "end", "win", "won", "fin", "bravo", "gagné", "trouvé", "found");
     static final Set<String> lowerKeywords = Set.of("petit", "lower");
     static final Set<String> greaterKeywords = Set.of("grand", "greater");
@@ -24,44 +24,48 @@ public class Part4Grader implements PartGrader {
 
     static final String TOKENIZE_REGEX = "\\s|\\p{Punct}|\n";
 
+    @NotNull
     @Override
     public String name() {
         return "Part 4 - Human Player";
     }
 
+    @NotNull
     @Override
     public Double maxGrade() {
         return 4.0D;
     }
 
+    @NotNull
     @Override
-    public GradePart grade(GradingConfiguration configuration, Exercise exercise, LaunchingContext context, GitContext gitContext) {
+    public GradePart grade(LaunchingContext context) {
         if (context.compilationFailed) {
             return result(List.of("Not available when there is compilation failures"), 0.0D);
         }
 
         String mainClass = "fr.lernejo.guessgame.Launcher";
-        context.processBuilder.command(Paths.get(System.getProperty("java.home")).resolve("bin").resolve("java").toString(), "-cp", exercise.getRoot().resolve("target").resolve("classes").toString(), mainClass, "-interactive");
+        context.processBuilder.command(Paths.get(System.getProperty("java.home")).resolve("bin").resolve("java").toString(),
+            "-cp", context.getExercise().getRoot().resolve("target").resolve("classes").toString(), mainClass, "-interactive");
 
         int attempt = 0;
         String storedResult = "<no output>";
         do {
             attempt++;
-            try (CloseableProcess process = new CloseableProcess(context.processBuilder.start())) {
-                String welcome = readOutput(process.process());// optional welcome message
+            try (InteractiveProcess process = new InteractiveProcess(context.processBuilder.start())) {
+                String welcome = process.read();// optional welcome message
                 int min = 0;
                 int max = 100;
                 int nextGuess = (max + min) / 2;
-                writeInput(process.process(), nextGuess + "\n");
+                process.write(nextGuess + "\n");
 
-                String result = readOutput(process.process());
-                if (!process.process().isAlive()) {
-                    return result(List.of("Cannot launch the game: " + readStream(process.process().getErrorStream())), 0);
+                String result = process.read();
+                if (!process.getProcess().isAlive()) {
+                    return result(List.of("Cannot launch the game: " + process.readErr()), 0);
                 }
                 if (result == null) {
-                    String error = readStream(process.process().getErrorStream());
+                    String error = process.readErr();
                     error = error != null ? "\n\t" + error : "";
-                    return result(List.of("No information given to player after submitting a guess (waited for" + processReadTimeout + "ms)" + error), maxGrade() * 1.0 / 3);
+                    return result(List.of("No information given to player after submitting a guess (waited for" + process.getProcessReadTimeout() + "ms)" + error), maxGrade() * 1.0 / 3);
                 }
 
                 List<String> scopedResult = List.of(result.toLowerCase().split("\\s|\\."));
@@ -94,10 +98,10 @@ public class Part4Grader implements PartGrader {
                         max = nextGuess;
                     }
                     nextGuess = (max + min) / 2;
-                    writeInput(process.process(), nextGuess + "\n");
-                    result = readOutput(process.process());
+                    process.write(nextGuess + "\n");
+                    result = process.read();
                     if (result == null) {
-                        return result(List.of("Cannot get an output in " + processReadTimeout + " ms, last output was: `" + storedResult + "`"), maxGrade() * 1.0 / 3);
+                        return result(List.of("Cannot get an output in " + process.getProcessReadTimeout() + " ms, last output was: `" + storedResult + "`"), maxGrade() * 1.0 / 3);
                     }
                     storedResult = result;
                 } while (currentIteration < maxLoop);
@@ -121,10 +125,10 @@ public class Part4Grader implements PartGrader {
                         max = nextGuess;
                     }
                     nextGuess = (max + min) / 2;
-                    writeInput(process.process(), nextGuess + "\n");
-                    result = readOutput(process.process());
+                    process.write(nextGuess + "\n");
+                    result = process.read();
                     if (result == null) {
-                        return result(List.of("Cannot get an output in " + processReadTimeout + " ms, last output was: `" + storedResult + "`"), maxGrade() * 1.0 / 3);
+                        return result(List.of("Cannot get an output in " + process.getProcessReadTimeout() + " ms, last output was: `" + storedResult + "`"), maxGrade() * 1.0 / 3);
                     }
                     storedResult = result;
                 } while (currentIteration < maxLoop);
