@@ -1,17 +1,17 @@
 package com.github.lernejo.korekto.grader.decoupling.parts;
 
-import com.github.lernejo.korekto.grader.decoupling.LaunchingContext;
-import com.github.lernejo.korekto.toolkit.GradePart;
-import com.github.lernejo.korekto.toolkit.PartGrader;
-import com.github.lernejo.korekto.toolkit.misc.InteractiveProcess;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.github.lernejo.korekto.grader.decoupling.LaunchingContext;
+import com.github.lernejo.korekto.toolkit.GradePart;
+import com.github.lernejo.korekto.toolkit.PartGrader;
+import com.github.lernejo.korekto.toolkit.misc.InteractiveProcess;
+import org.jetbrains.annotations.NotNull;
 
 public class Part4Grader implements PartGrader<LaunchingContext> {
     static final Set<String> endKeywords = Set.of("done", "end", "win", "won", "fin", "bravo", "gagné", "trouvé", "found");
@@ -60,7 +60,11 @@ public class Part4Grader implements PartGrader<LaunchingContext> {
 
                 String result = process.read();
                 if (!process.getProcess().isAlive()) {
-                    return result(List.of("Cannot launch the game: " + process.readErr()), 0);
+                    String error = process.readErr();
+                    if (error == null) {
+                        error = result;
+                    }
+                    return result(List.of("The program stopped before the game was finished: " + error), 0);
                 }
                 if (result == null) {
                     String error = process.readErr();
