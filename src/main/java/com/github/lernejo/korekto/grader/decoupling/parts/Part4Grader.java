@@ -15,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class Part4Grader implements PartGrader<LaunchingContext> {
     static final Set<String> endKeywords = Set.of("done", "end", "win", "won", "fin", "bravo", "gagné", "trouvé", "found");
-    static final Set<String> lowerKeywords = Set.of("petit", "lower");
-    static final Set<String> greaterKeywords = Set.of("grand", "greater");
+    static final Set<String> lowerKeywords = Set.of("petit", "lower", "smaller");
+    static final Set<String> greaterKeywords = Set.of("grand", "greater", "bigger");
     static final Set<String> decisionKeywords = Stream.concat(
         lowerKeywords.stream(),
         greaterKeywords.stream()
