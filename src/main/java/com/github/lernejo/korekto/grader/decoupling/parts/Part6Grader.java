@@ -49,8 +49,7 @@ public class Part6Grader implements PartGrader<LaunchingContext> {
         Predicate<String> condition = m -> !m.contains("1234");
         final Object filteredLogger;
         try {
-            // TODO here we assume the order of the params, we need to cover all cases (+ inversion and bad params)
-            filteredLogger = filteredLoggerClass.getConstructor(context.loggerClass, Predicate.class).newInstance(testLoggerFiltered, condition);
+            filteredLogger = InvocationUtils.invokeMatchingConstructor(filteredLoggerClass, testLoggerFiltered, condition);
         } catch (ReflectiveOperationException e) {
             return result(List.of("Unable to invoke FilteredLogger constructor: " + e.getMessage()), 0.0D);
         }
@@ -58,17 +57,16 @@ public class Part6Grader implements PartGrader<LaunchingContext> {
         String contextMarker = "--testContext--";
         final Object contextualLogger;
         try {
-            // TODO here we assume the order of the params, we need to cover all cases (+ inversion and bad params)
-            contextualLogger = contextualLoggerClass.getConstructor(String.class, context.loggerClass).newInstance(contextMarker, testLoggerContextual);
+            contextualLogger = InvocationUtils.invokeMatchingConstructor(contextualLoggerClass, contextMarker, testLoggerContextual);
         } catch (ReflectiveOperationException e) {
-            return result(List.of("Unable to invoke FilteredLogger constructor: " + e.getMessage()), 0.0D);
+            return result(List.of("Unable to invoke ContextualLogger constructor: " + e.getMessage()), 0.0D);
         }
 
         final Object compositeLogger;
         try {
-            compositeLogger = compositeLoggerClass.getConstructor(context.loggerClass, context.loggerClass).newInstance(filteredLogger, contextualLogger);
+            compositeLogger = InvocationUtils.invokeMatchingConstructor(compositeLoggerClass, filteredLogger, contextualLogger);
         } catch (ReflectiveOperationException e) {
-            return result(List.of("Unable to invoke FilteredLogger constructor: " + e.getMessage()), 0.0D);
+            return result(List.of("Unable to invoke CompositeLogger constructor: " + e.getMessage()), 0.0D);
         }
 
         final Method logMethod;
