@@ -5,6 +5,8 @@ import com.github.lernejo.korekto.toolkit.GradePart;
 import com.github.lernejo.korekto.toolkit.PartGrader;
 import com.github.lernejo.korekto.toolkit.misc.InteractiveProcess;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -12,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Part5Grader implements PartGrader<LaunchingContext> {
+
+    private final Logger logger = LoggerFactory.getLogger(Part5Grader.class);
 
     @NotNull
     @Override
@@ -23,6 +27,10 @@ public class Part5Grader implements PartGrader<LaunchingContext> {
     @Override
     public Double maxGrade() {
         return 4.0D;
+    }
+
+    private boolean isBlank(String s) {
+        return  s == null || s.isBlank();
     }
 
     @NotNull
@@ -46,7 +54,11 @@ public class Part5Grader implements PartGrader<LaunchingContext> {
                 String result = process.read();
                 String error = process.readErr();
                 if (error != null) {
-                    return result(List.of("An error occurred: " + error), 0);
+                    if (isBlank(result) && isBlank(welcome)) {
+                        return result(List.of("An error occurred: " + error), 0);
+                    } else {
+                        logger.warn("Java program wrote to stderr: " + error);
+                    }
                 }
                 if (welcome == null && result == null) {
                     continue;
