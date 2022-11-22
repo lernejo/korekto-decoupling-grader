@@ -1,12 +1,17 @@
 package com.github.lernejo.korekto.grader.decoupling;
 
-import com.github.lernejo.korekto.grader.decoupling.parts.*;
+import com.github.lernejo.korekto.grader.decoupling.parts.Part3Grader;
+import com.github.lernejo.korekto.grader.decoupling.parts.Part4Grader;
+import com.github.lernejo.korekto.grader.decoupling.parts.Part5Grader;
+import com.github.lernejo.korekto.grader.decoupling.parts.Part6Grader;
 import com.github.lernejo.korekto.toolkit.GradePart;
 import com.github.lernejo.korekto.toolkit.Grader;
 import com.github.lernejo.korekto.toolkit.GradingConfiguration;
 import com.github.lernejo.korekto.toolkit.PartGrader;
 import com.github.lernejo.korekto.toolkit.misc.HumanReadableDuration;
 import com.github.lernejo.korekto.toolkit.misc.SubjectForToolkitInclusion;
+import com.github.lernejo.korekto.toolkit.partgrader.GitHubActionsPartGrader;
+import com.github.lernejo.korekto.toolkit.partgrader.MavenCompileAndTestPartGrader;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,8 +64,8 @@ public class DecouplingGrader implements Grader<LaunchingContext> {
 
     private Collection<? extends PartGrader<LaunchingContext>> graders() {
         return List.of(
-            new Part1Grader(),
-            new Part2Grader(),
+            new MavenCompileAndTestPartGrader<>("Part 1 - Compilation & Tests", 4.0D),
+            new GitHubActionsPartGrader<>("Part 2 - CI", 1.0D),
             new Part3Grader(),
             new Part4Grader(),
             new Part5Grader(),

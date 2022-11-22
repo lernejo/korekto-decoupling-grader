@@ -27,7 +27,7 @@ public class Part3Grader implements PartGrader<LaunchingContext> {
     @NotNull
     @Override
     public GradePart grade(LaunchingContext context) {
-        if (context.compilationFailed) {
+        if (context.hasCompilationFailed()) {
             return result(List.of("Not available when there is compilation failures"), 0.0D);
         }
 
