@@ -40,9 +40,11 @@ public class Part5Grader implements PartGrader<LaunchingContext> {
             return result(List.of("Not available when there is compilation failures"), 0.0D);
         }
 
+        int numberToGuess = LaunchingContext.getRandomSource().nextInt(57) + 57;
+
         String mainClass = "fr.lernejo.guessgame.Launcher";
         context.processBuilder.command(Paths.get(System.getProperty("java.home")).resolve("bin").resolve("java").toString(),
-            "-cp", context.getExercise().getRoot().resolve("target").resolve("classes").toString(), mainClass, "-auto", "56");
+            "-cp", context.getExercise().getRoot().resolve("target").resolve("classes").toString(), mainClass, "-auto", String.valueOf(numberToGuess));
 
         int attempt = 0;
         String storedResult = null;
