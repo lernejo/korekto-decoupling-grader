@@ -14,7 +14,7 @@ import com.github.lernejo.korekto.toolkit.misc.InteractiveProcess;
 import org.jetbrains.annotations.NotNull;
 
 public class Part4Grader implements PartGrader<LaunchingContext> {
-    static final Set<String> endKeywords = Set.of("done", "end", "win", "won", "fin", "bravo", "gagné", "trouvé", "found", "correct");
+    static final Set<String> endKeywords = Set.of("done", "end", "win", "won", "fin", "bravo", "gagné", "trouvé", "found", "correct", "congratulations");
     static final Set<String> lowerKeywords = Set.of("petit", "lower", "smaller");
     static final Set<String> greaterKeywords = Set.of("grand", "greater", "bigger");
     static final Set<String> decisionKeywords = Stream.concat(
