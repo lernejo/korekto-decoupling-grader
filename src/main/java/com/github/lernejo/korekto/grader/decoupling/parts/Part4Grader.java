@@ -72,7 +72,7 @@ public class Part4Grader implements PartGrader<LaunchingContext> {
                     return result(List.of("No information given to player after submitting a guess (waited for" + process.getProcessReadTimeout() + "ms)" + error), maxGrade() * 1.0 / 3);
                 }
 
-                List<String> scopedResult = List.of(result.toLowerCase().split("\\s|\\."));
+                List<String> scopedResult = List.of(result.toLowerCase().split(TOKENIZE_REGEX));
                 if (endKeywords.stream().anyMatch(scopedResult::contains)) {
                     storedResult = result;
                     // Right guess at the first response, or return true...
