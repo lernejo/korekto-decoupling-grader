@@ -2,6 +2,7 @@
 Korekto grader for Decoupling exercise
 
 [![Build](https://github.com/lernejo/korekto-decoupling-grader/actions/workflows/build.yml/badge.svg)](https://github.com/lernejo/korekto-decoupling-grader/actions)
+[![codecov](https://codecov.io/gh/lernejo/korekto-decoupling-grader/branch/main/graph/badge.svg?token=wnWG2zJk2P)](https://codecov.io/gh/lernejo/korekto-decoupling-grader)
 
 ## Launch locally
 
