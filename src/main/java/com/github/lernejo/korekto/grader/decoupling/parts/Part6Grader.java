@@ -50,7 +50,7 @@ public class Part6Grader implements PartGrader<LaunchingContext> {
         final Object filteredLogger;
         try {
             filteredLogger = InvocationUtils.invokeMatchingConstructor(filteredLoggerClass, testLoggerFiltered, condition);
-        } catch (ReflectiveOperationException e) {
+        } catch (ReflectiveOperationException | IllegalArgumentException e) {
             return result(List.of("Unable to invoke FilteredLogger constructor: " + e.getMessage()), 0.0D);
         }
 
@@ -58,14 +58,14 @@ public class Part6Grader implements PartGrader<LaunchingContext> {
         final Object contextualLogger;
         try {
             contextualLogger = InvocationUtils.invokeMatchingConstructor(contextualLoggerClass, contextMarker, testLoggerContextual);
-        } catch (ReflectiveOperationException e) {
+        } catch (ReflectiveOperationException | IllegalArgumentException e) {
             return result(List.of("Unable to invoke ContextualLogger constructor: " + e.getMessage()), 0.0D);
         }
 
         final Object compositeLogger;
         try {
             compositeLogger = InvocationUtils.invokeMatchingConstructor(compositeLoggerClass, filteredLogger, contextualLogger);
-        } catch (ReflectiveOperationException e) {
+        } catch (ReflectiveOperationException | IllegalArgumentException e) {
             return result(List.of("Unable to invoke CompositeLogger constructor: " + e.getMessage()), 0.0D);
         }
 

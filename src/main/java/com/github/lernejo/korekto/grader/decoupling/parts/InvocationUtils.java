@@ -1,5 +1,6 @@
 package com.github.lernejo.korekto.grader.decoupling.parts;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,14 +12,38 @@ public class InvocationUtils {
 
     public static Object invokeMatchingConstructor(Class<?> clazz, Object... parameters) throws ReflectiveOperationException {
         Constructor<?>[] constructors = clazz.getConstructors();
-        Optional<Constructor<?>> constructor = Arrays.stream(constructors)
+        Optional<Constructor<?>> positionalConstructor = Arrays.stream(constructors)
             .filter(c -> c.getParameterCount() == parameters.length)
             .filter(c -> areParametersCompatible(c, parameters))
             .findFirst();
-        if (constructor.isEmpty()) {
-            throw new NoSuchMethodException(clazz.getName() + "#<init>(" + Arrays.stream(parameters).map(Object::getClass).map(Class::getName).collect(Collectors.joining(", ")) + ')');
+        if (positionalConstructor.isEmpty()) {
+            Optional<Constructor<?>> arrayConstructor = Arrays.stream(constructors)
+                .filter(c -> c.getParameterCount() == 1)
+                .filter(c -> c.getParameterTypes()[0].isArray())
+                .filter(c -> typesMatches(c.getParameterTypes()[0].componentType(), parameters))
+                .findFirst();
+            if (arrayConstructor.isEmpty()) {
+                throw new NoSuchMethodException(clazz.getName() + "#<init>(" + Arrays.stream(parameters).map(Object::getClass).map(Class::getName).collect(Collectors.joining(", ")) + ')');
+            } else {
+                Constructor<?> constructor = arrayConstructor.get();
+                Object arrayParameter = createProperArrayOfType(constructor.getParameterTypes()[0].componentType(), parameters);
+                return constructor.newInstance(new Object[]{arrayParameter});
+            }
+        } else {
+            return positionalConstructor.get().newInstance(getParametersInOrder(positionalConstructor.get(), parameters));
         }
-        return constructor.get().newInstance(getParametersInOrder(constructor.get(), parameters));
+    }
+
+    private static Object createProperArrayOfType(Class<?> parameterType, Object[] parameters) {
+        Object array = Array.newInstance(parameterType, parameters.length);
+        for(var i = 0 ; i < parameters.length; i++) {
+            Array.set(array, i, parameters[i]);
+        }
+        return array;
+    }
+
+    private static boolean typesMatches(Class<?> type, Object[] objects) {
+        return Arrays.stream(objects).allMatch(o -> o == null || type.isAssignableFrom(o.getClass()));
     }
 
     private static Object[] getParametersInOrder(Constructor<?> constructor, Object[] parameters) {
@@ -40,9 +65,7 @@ public class InvocationUtils {
             .stream()
             .filter(p -> parameterType.isAssignableFrom(p.getClass()))
             .findFirst();
-        if (match.isPresent()) {
-            parameterBag.remove(match.get());
-        }
+        match.ifPresent(parameterBag::remove);
         return match;
     }
 }
