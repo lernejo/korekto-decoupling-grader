@@ -9,10 +9,6 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
-# Ignoring Maven wrapper to be downloaded
-.mvn/wrapper/maven-wrapper.jar
-
-
 # IntelliJ
 .idea/
 *.iml
