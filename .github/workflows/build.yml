@@ -1,8 +1,0 @@
-name: Build
-
-on: push
-
-jobs:
-  build:
-    uses: lernejo/korekto-toolkit/.github/workflows/generic-build.yml@main
-    secrets: inherit

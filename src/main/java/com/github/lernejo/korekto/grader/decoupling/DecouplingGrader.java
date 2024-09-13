@@ -26,6 +26,12 @@ public class DecouplingGrader implements Grader<LaunchingContext> {
 
     @NotNull
     @Override
+    public String name() {
+        return "korekto-decoupling-grader";
+    }
+
+    @NotNull
+    @Override
     public String slugToRepoUrl(@NotNull String slug) {
         return "https://github.com/" + slug + "/decoupling_java_training";
     }

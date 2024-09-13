@@ -1,0 +1,15 @@
+name: Build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+    uses: lernejo/reusable-workflows/.github/workflows/ci.yml@main
+    secrets: inherit
+    with:
+      runs-on: ${{ matrix.os }}
