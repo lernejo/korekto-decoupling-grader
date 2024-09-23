@@ -254,7 +254,7 @@ public class FileLogger implements Logger {
 }
 ----
 
-* Modifier le code de `LoggerFactory` afin que les messages soient produits dans un fichier sur le disque
+* Modifier le code de `LoggerFactory` afin que les messages soient produits dans un fichier sur le disque: `target/captain.log`
 
 * Lancer le programme et vérifier que les messages apparaissent bien datés et avec la classe d’origine dans le fichier spécifié dans la classe `LoggerFactory`
 * Indexer et commiter les fichiers nouvellement créés
