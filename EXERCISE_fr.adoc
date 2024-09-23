@@ -156,7 +156,7 @@ La méthode `nextRound` devra :
 ** Vérifier s’il est égal, plus grand ou plus petit
 ** S’il est égal, retourner `true`
 ** Sinon, donner l’indice (plus grand ou plus petit) au joueur et retourner `false`
-** Dans tous les cas, afficher via `logger` les informations permettant de suivre l’évolution de la partie
+** L'implémentation de `Player` afficher via `logger` les informations permettant au joueur humain de faire sa prochaine hypothèse
 
 * La méthode `loopUntilPlayerSucceed` devra utiliser une boucle afin d’appeler `nextRound` jusqu’à ce que la partie soit finie.
 * Quand la partie est finie, afficher un message adéquat (ex: `you won !`, `c'est gagné`, etc.)
