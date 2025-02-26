@@ -16,7 +16,7 @@
         <korekto-toolkit.version>1.4.2</korekto-toolkit.version>
         <byte-buddy.version>1.17.1</byte-buddy.version>
         <juniversalchardet.version>2.4.0</juniversalchardet.version>
-        <logback-classic.version>1.5.16</logback-classic.version>
+        <logback-classic.version>1.5.17</logback-classic.version>
 
         <junit.version>5.11.4</junit.version>
         <assertj.version>3.27.3</assertj.version>
