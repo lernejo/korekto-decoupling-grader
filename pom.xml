@@ -14,7 +14,7 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <korekto-toolkit.version>1.4.2</korekto-toolkit.version>
-        <byte-buddy.version>1.17.4</byte-buddy.version>
+        <byte-buddy.version>1.17.5</byte-buddy.version>
         <juniversalchardet.version>2.4.0</juniversalchardet.version>
         <logback-classic.version>1.5.18</logback-classic.version>
 
